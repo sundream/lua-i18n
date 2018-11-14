@@ -37,8 +37,8 @@ def genModFile(files,patten,exts,output):
                 continue
             lines.update(_genModFile(filename,patten))
         else:
-            for root,files,dirs in os.walk(path):
-                for filename in iter(files):
+            for root,dirs,filenames in os.walk(path):
+                for filename in iter(filenames):
                     _,ext = os.path.splitext(filename)
                     if ext not in exts:
                         continue
