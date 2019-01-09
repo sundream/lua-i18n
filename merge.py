@@ -23,12 +23,13 @@ def merge(source_filename,to_filename):
     to_fd.close()
     src_dict = {}
     to_dict = {}
-    sep = "==="
+    sep = "\t"
     for src_line in iter(src_lines):
         src_line = src_line.strip()
         if src_line == "":
             continue
         src_lst = src_line.split(sep)
+        src_lst = [text for text in src_lst if text != ""]
         src_raw = src_lst[0]
         src_translate = ""
         if len(src_lst) >= 2:
@@ -39,6 +40,7 @@ def merge(source_filename,to_filename):
         if to_line == "":
             continue
         to_lst = to_line.split(sep)
+        to_lst = [text for text in to_lst if text != ""]
         to_raw = to_lst[0]
         to_translate = ""
         if len(to_lst) >= 2:
@@ -60,7 +62,7 @@ def merge(source_filename,to_filename):
 
 def main():
     usage = '''usage: python %prog [options]
-    e.g: python %prog --source=mod.txt --to=mod/en/chapter001.txt"
+    e.g: python %prog --source=mod.txt --to=mod/en_US/mod.txt"
     '''
     parser = optparse.OptionParser(usage=usage,version="%prog 0.0.1")
     parser.add_option("-f","--source",help=u"[required] 来源文件")

@@ -53,7 +53,7 @@ def genModFile(files,patten,exts,output):
 def main():
     usage = u'''usage: python %prog [options]
     e.g: python %prog 文件/目录
-    e.g: python %prog --output=mod/example.txt --ext=.lua --patten=i18n.format 文件/目录
+    e.g: python %prog --output=mod.txt --ext=.lua --patten=i18n.format 文件/目录
     '''
     parser = optparse.OptionParser(usage=usage,version="%prog 0.0.1")
     parser.add_option("-o","--output",help=u"[optional] 输出文件",default="mod.txt")

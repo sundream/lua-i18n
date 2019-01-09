@@ -10,9 +10,8 @@ local function test()
 	i18n.init({
 		lang = "zh_CN",
 		translate_table = translate_table,
-		--mod = "./mod"
 	})
-
+	i18n.load_file("en_US","./mod/en_US/mod.txt")
 	local packstr = i18n.format("这是中文,参数1:{1},参数2:{2}","名字",1)
 	local str = i18n.translateto(i18n.lang,packstr)
 	print(str)
@@ -46,4 +45,3 @@ end
 -- enter i18n directory
 -- test by: lua i18n/test.lua
 test()
-
