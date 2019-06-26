@@ -53,6 +53,6 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
             fd:close()
             return cjson.decode(data)
         end
-        i18n.translates["en_US"] = readfile("languages/en_US.json")
-        i18n.translates["zh_TW"] = readfile("languages/zh_TW.json")
+        i18n.languages["en_US"] = readfile("languages/en_US.json")
+        i18n.languages["zh_TW"] = readfile("languages/zh_TW.json")
 	```

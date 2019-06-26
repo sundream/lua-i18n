@@ -1,4 +1,4 @@
-local translates = {
+local languages = {
 	en_US = {
 		["这是中文,参数1:{1},参数2:{2}"] = "this is chinese,parameter 2:{2},parameter 1:{1}",
 		["测试字典参数,目标={target},npc={npc}"] = "test dictionary parameter,target={target},npc={npc}",
@@ -8,7 +8,7 @@ local translates = {
 local function test()
 	local i18n = require "i18n"
 	i18n.init({
-		translates = translates,
+		languages = languages,
 	})
     local readfile = function (filename)
         local cjson = require "cjson"
@@ -17,7 +17,7 @@ local function test()
         fd:close()
         return cjson.decode(data)
     end
-    i18n.translates["en_US"] = readfile("languages/en_US.json")
+    i18n.languages["en_US"] = readfile("languages/en_US.json")
 	local packstr = i18n.format("这是中文,参数1:{1},参数2:{2}","名字",1)
 	local str = i18n.translateto("zh_CN",packstr)
 	print(str)

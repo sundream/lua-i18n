@@ -2,14 +2,14 @@ local i18n = {}
 
 function i18n.init(option)
     -- auto translate to's language
-	i18n.to_lang = option.to_lang
-	i18n.translates = option.translates or {}
+	i18n.default_language = option.default_language
+	i18n.languages = option.languages or {}
 	i18n.alias = {}
 end
 
 function i18n.format(fmt,...)
-    if i18n.to_lang then
-        return i18n.translateto(i18n.to_lang,i18n.pack(fmt,...))
+    if i18n.default_language then
+        return i18n.translateto(i18n.default_language,i18n.pack(fmt,...))
     end
 	return i18n.pack(fmt,...)
 end
@@ -44,7 +44,7 @@ function i18n.text(lang,raw)
 	if i18n.alias[raw] then
 		raw = i18n.alias[raw]
 	end
-	local dict = i18n.translates[lang]
+	local dict = i18n.languages[lang]
 	if not dict then
 		return raw
 	end
