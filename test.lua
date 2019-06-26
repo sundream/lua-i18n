@@ -8,7 +8,6 @@ local translates = {
 local function test()
 	local i18n = require "i18n"
 	i18n.init({
-		lang = "zh_CN",
 		translates = translates,
 	})
     local readfile = function (filename)
@@ -20,7 +19,7 @@ local function test()
     end
     i18n.translates["en_US"] = readfile("languages/en_US.json")
 	local packstr = i18n.format("这是中文,参数1:{1},参数2:{2}","名字",1)
-	local str = i18n.translateto(i18n.lang,packstr)
+	local str = i18n.translateto("zh_CN",packstr)
 	print(str)
 	local str = i18n.translateto("en_US",packstr)
 	print(str)
@@ -47,6 +46,10 @@ local function test()
 	local packstr = i18n.format("测试字典参数,目标={target},npc={npc}",{target="目标",npc="npc90001"})
 	local str = i18n.translateto("en_US",packstr)
 	print(str)
+    -- 如果设置了to_lang字段,i18n.format将自动翻译
+    i18n.to_lang = "zh_CN"
+	local packstr = i18n.format("测试字典参数,目标={target},npc={npc}",{target="目标",npc="npc90001"})
+    print(packstr)
 end
 
 -- enter i18n directory

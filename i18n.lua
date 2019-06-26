@@ -1,20 +1,16 @@
 local i18n = {}
 
 function i18n.init(option)
-	i18n.lang = assert(option.lang)
+    -- auto translate to's language
+	i18n.to_lang = option.to_lang
 	i18n.translates = option.translates or {}
 	i18n.alias = {}
 end
 
-function i18n.load_file(lang,filename,readfile)
-	if not i18n.translates[lang] then
-		i18n.translates[lang] = {}
-	end
-    local tbl = readfile(filename)
-    i18n.translates[lang] = tbl
-end
-
 function i18n.format(fmt,...)
+    if i18n.to_lang then
+        return i18n.translateto(i18n.to_lang,i18n.pack(fmt,...))
+    end
 	return i18n.pack(fmt,...)
 end
 

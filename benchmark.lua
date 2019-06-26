@@ -8,7 +8,6 @@ local translates = {
 local function benchmark(cnt)
 	local i18n = require "i18n"
 	i18n.init({
-		lang = "zh_CN",
 		translates = translates,
 	})
 	local time = os.clock()
