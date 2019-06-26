@@ -19,14 +19,14 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
 	```
         	python search.py -h
 		e.g:
-		python search.py --output=mod.txt .
+		python search.py --output=languages/en_US.json .
 	```
 
 3. 合并最新待翻译文件和已翻译文件
 	```
         	python merge.py -h
 		e.g:
-		python merge.py --source=mod.txt --to=mod/en_US/mod.txt
+		python merge.py --source=languages/en_US_1.json --to=languages/en_US.json
 	```
 
 4. 将待翻译文件交由专业人员翻译,原始文本和翻译文本必须用"单个字表符"隔开
@@ -36,19 +36,23 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
 5. 使用已翻译文本
 	```
 		语言编码采用iso-639-1,国家地区编码采用iso-3166-1
-		mod目录构成
-		mod
-			+zh_CN			// 汉语大陆地区
-				+mod.txt
-			+zh_TW			// 汉语台湾地区
-				+mod.txt
-			+en_US			// 英语美国地区
-				+mod.txt
+		目录构成
+		languages
+			+zh_CN.json			// 汉语大陆地区
+			+zh_TW.json			// 汉语台湾地区
+			+en_US.json         // 英语美国地区
 
 		-- 执行以下语句即可初始化
 		i18n.init({
 				lang = "zh_CN",	-- 原生语言
 		})
-		i18n.load_file("zh_TW","mod/zh_TW/mod.txt")
-		i18n.load_file("en_US","mod/en_US/mod.txt")
+        local readfile = function (filename)
+            local cjson = require "cjson"
+            local fd = io.open(filename,"rb")
+            local data = fd:read("*a")
+            fd:close()
+            return cjson.decode(data)
+        end
+        i18n.translates["en_US"] = readfile("languages/en_US.json")
+        i18n.translates["zh_TW"] = readfile("languages/zh_TW.json")
 	```

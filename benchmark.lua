@@ -1,4 +1,4 @@
-local translate_table = {
+local translates = {
 	en_US = {
 		["这是中文,参数1:{1},参数2:{2}"] = "this is english,parameter 2:{2},parameter 1:{1}",
 		["测试字典参数,目标={target},npc={npc}"] = "test dictionary parameter,target={target},npc={npc}",
@@ -9,7 +9,7 @@ local function benchmark(cnt)
 	local i18n = require "i18n"
 	i18n.init({
 		lang = "zh_CN",
-		translate_table = translate_table,
+		translates = translates,
 	})
 	local time = os.clock()
 	for i=1,cnt do

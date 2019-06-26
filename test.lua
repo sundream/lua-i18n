@@ -1,4 +1,4 @@
-local translate_table = {
+local translates = {
 	en_US = {
 		["这是中文,参数1:{1},参数2:{2}"] = "this is chinese,parameter 2:{2},parameter 1:{1}",
 		["测试字典参数,目标={target},npc={npc}"] = "test dictionary parameter,target={target},npc={npc}",
@@ -9,9 +9,16 @@ local function test()
 	local i18n = require "i18n"
 	i18n.init({
 		lang = "zh_CN",
-		translate_table = translate_table,
+		translates = translates,
 	})
-	i18n.load_file("en_US","./mod/en_US/mod.txt")
+    local readfile = function (filename)
+        local cjson = require "cjson"
+        local fd = io.open(filename,"rb")
+        local data = fd:read("*a")
+        fd:close()
+        return cjson.decode(data)
+    end
+    i18n.translates["en_US"] = readfile("languages/en_US.json")
 	local packstr = i18n.format("这是中文,参数1:{1},参数2:{2}","名字",1)
 	local str = i18n.translateto(i18n.lang,packstr)
 	print(str)

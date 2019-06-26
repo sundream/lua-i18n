@@ -2,22 +2,16 @@ local i18n = {}
 
 function i18n.init(option)
 	i18n.lang = assert(option.lang)
-	i18n.translate_table = option.translate_table or {}
+	i18n.translates = option.translates or {}
 	i18n.alias = {}
 end
 
-function i18n.load_file(lang,filename)
-	if not i18n.translate_table[lang] then
-		i18n.translate_table[lang] = {}
+function i18n.load_file(lang,filename,readfile)
+	if not i18n.translates[lang] then
+		i18n.translates[lang] = {}
 	end
-	local fd = io.open(filename,"rb")
-	for line in fd:lines() do
-		raw,translate = line:match("^([^\t]+)\t+([^\t]+)$")
-		if raw and translate then
-			i18n.translate_table[lang][raw] = translate
-		end
-	end
-	fd:close()
+    local tbl = readfile(filename)
+    i18n.translates[lang] = tbl
 end
 
 function i18n.format(fmt,...)
@@ -54,7 +48,7 @@ function i18n.text(lang,raw)
 	if i18n.alias[raw] then
 		raw = i18n.alias[raw]
 	end
-	local dict = i18n.translate_table[lang]
+	local dict = i18n.translates[lang]
 	if not dict then
 		return raw
 	end

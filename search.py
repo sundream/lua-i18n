@@ -6,6 +6,8 @@ import os
 import os.path
 import re
 import string
+import json
+import codecs
 
 def _genModFile(filename,patten):
     # i18n.format("搜索的内容")
@@ -14,20 +16,25 @@ def _genModFile(filename,patten):
     lines = {}
     patten = re.compile(patten,re.S)
     try:
-        fd = open(filename,"rb")
+        encoding = "utf-8"
+        fd = codecs.open(filename,"rb",encoding)
         content = fd.read()
         if not content:
-            return
+            return {}
         for hit in patten.finditer(content):
             msg = hit.group(2)
             if not lines.has_key(msg):
-                lines[msg] = True
+                lines[msg] = ""
     finally:
         fd.close()
     return lines
 
 def genModFile(files,patten,exts,output):
-    fd = open(output,"wb")
+    dirname = os.path.dirname(output)
+    if not os.path.isdir(dirname):
+        os.makedirs(dirname)
+    encoding = "utf-8"
+    fd = codecs.open(output,"wb",encoding)
     lines = {}
     for path in iter(files):
         if os.path.isfile(path):
@@ -44,19 +51,17 @@ def genModFile(files,patten,exts,output):
                         continue
                     filename = os.path.join(root,filename)
                     lines.update(_genModFile(filename,patten))
-    lines = [k for k in lines] 
-    lines.sort()
-    data = string.join(lines,"\n")
+    data = json.dumps(lines,indent=4,sort_keys=True,ensure_ascii=False,encoding="utf-8")
     fd.write(data)
     fd.close()
 
 def main():
     usage = u'''usage: python %prog [options]
     e.g: python %prog 文件/目录
-    e.g: python %prog --output=mod.txt --ext=.lua --patten=i18n.format 文件/目录
+    e.g: python %prog --output=languages/en_US.json --ext=.lua --patten=i18n.format 文件/目录
     '''
     parser = optparse.OptionParser(usage=usage,version="%prog 0.0.1")
-    parser.add_option("-o","--output",help=u"[optional] 输出文件",default="mod.txt")
+    parser.add_option("-o","--output",help=u"[optional] 输出文件",default="languages/en_US.json")
     parser.add_option("-e","--ext",help=u"[optional] 搜索文件的扩展名",default=".lua")
     parser.add_option("-p","--patten",help=u"[optional] 匹配模式",default="i18n.format")
     options,args = parser.parse_args()
