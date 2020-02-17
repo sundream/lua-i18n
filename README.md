@@ -9,9 +9,9 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
 ## 用法
 1. 将所有需要翻译的语句用i18n.format格式化,如
 	```
-	string.format("这是中文,参数1:%s,参数2:%s","名字",1) ==> i18n.format("这是中文,参数1:{1},参数2:{2}","名字",1)
+	string.format("这是中文,参数1:%s,参数2:%s","名字",1) ==> i18n.format("这是中文,参数1:{0},参数2:{1}","名字",1)
 	"需要翻译的语句" ==> i18n.format("需要翻译的语句")
-	string.format("%s %s","需要翻译的参数","不需要翻译的参数") ==> i18n.format("{1} {2}",i18n.format("需要翻译的参数"),"不需要翻译的参数")
+	string.format("%s %s","需要翻译的参数","不需要翻译的参数") ==> i18n.format("{0} {1}",i18n.format("需要翻译的参数"),"不需要翻译的参数")
 	-- i18n.format还支持格式化字典,如
 	i18n.format("测试字典参数,目标={target},npc={npc}",{target="目标",npc="npc90001"})
 	```
@@ -31,7 +31,7 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
 
 4. 将待翻译文件交由专业人员翻译,原始文本和翻译文本必须用"单个字表符"隔开
 	如:
-	这是中文,参数1:{1},参数2:{2}	this is chinese,parameter 2:{2},parameter 1:{1}
+	这是中文,参数1:{0},参数2:{1}	this is chinese,parameter 2:{1},parameter 1:{0}
 
 5. 使用已翻译文本
 	```
@@ -42,17 +42,24 @@ i18n是一个用纯lua实现的国际化解决方案,大概只用了100行lua代
 			+zh_TW.json			// 汉语台湾地区
 			+en_US.json         // 英语美国地区
 
-		-- 执行以下语句即可初始化
-		i18n.init({
-				lang = "zh_CN",	-- 原生语言
-		})
-        local readfile = function (filename)
-            local cjson = require "cjson"
-            local fd = io.open(filename,"rb")
-            local data = fd:read("*a")
-            fd:close()
-            return cjson.decode(data)
-        end
-        i18n.languages["en_US"] = readfile("languages/en_US.json")
-        i18n.languages["zh_TW"] = readfile("languages/zh_TW.json")
+	-- 执行以下语句即可初始化
+	local en_US = readfile("languages/en_US.json")
+	languages = {}
+	for k,v in pairs(en_US) do
+		languages[k] = {en_US = v}	
+	end
+	local zh_CN = readfile("languages/zh_CN.json")
+	for k,v in pairs(zh_CN) do
+		if v and v ~= "" then
+			i18n.alias(k,v)
+		end
+	end
+	i18n.init({
+		languages = languages,
+	})
 	```
+6. 用法
+```
+    mkdir languages
+    lua test.lua
+```
