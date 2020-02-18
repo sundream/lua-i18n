@@ -60,10 +60,10 @@ local function test()
 	local packstr = i18n.format("测试字典参数,目标={target},npc={npc}",{target="目标",npc="npc90001"})
 	local str = i18n.translateto("en_US",packstr)
 	print(str)
-    -- 如果设置了default_language字段,i18n.format将自动翻译
-    i18n.default_language = "zh_CN"
+	--如果设置了default_language字段,i18n.format将自动翻译
+	i18n.default_language = "zh_CN"
 	local packstr = i18n.format("测试字典参数,目标={target},npc={npc}",{target="目标",npc="npc90001"})
-    print(packstr)
+	print(packstr)
 end
 
 -- enter i18n directory

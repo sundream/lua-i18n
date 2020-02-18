@@ -75,7 +75,7 @@ function i18n.unpack(lang,packstr)
 	end
 end
 
-function i18n.set(raw,alias)
+function i18n.alias(raw,alias)
 	i18n.languages[alias] = i18n.languages[raw]
 end
 
