@@ -46,7 +46,7 @@ function i18n.text(lang,raw)
 	if not dict then
 		return raw
 	end
-	if not dict[lang] then
+	if not dict[lang] or dict[lang] == "" then
 		return raw
 	end
 	return dict[lang]
@@ -63,7 +63,7 @@ function i18n.unpack(lang,packstr)
 			args[k] = i18n.unpack(lang,arg)
 		end
 		local result = string.gsub(fmt,"{(%w+)}",function (id)
-                        local number= tonumber(id)
+            local number= tonumber(id)
 			if number then
 				id = tostring(number + i18n.diff_index)
 			end
